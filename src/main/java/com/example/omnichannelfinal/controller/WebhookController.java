@@ -76,15 +76,5 @@ public class WebhookController {
 
         messagingTemplate.convertAndSend("/topic/messages", chatMessage);
 
-//        String messageID = messaging.getMessage().getMid();
-//        String messageText = messaging.getMessage().getText();
-//        String customerId = messaging.getSender().getId();
-//        String pageId = messaging.getRecipient().getId();
-//        long timestamp = messaging.getTimestamp();
-//        LocalDateTime dateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.systemDefault());
-
-//         Gửi tin nhắn qua WebSocket
-//        messagingTemplate.convertAndSend("/topic/messages",
-//                new ChatMessage(messageID, messageText, customerId, pageId, dateTime.toString()));
     }
 }
