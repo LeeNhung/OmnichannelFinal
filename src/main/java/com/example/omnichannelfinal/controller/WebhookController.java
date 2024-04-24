@@ -64,15 +64,27 @@ public class WebhookController {
 
     private void handleMessage(WebhookPayload.Messaging messaging) {
 
-        String messageID = messaging.getMessage().getMid();
-        String messageText = messaging.getMessage().getText();
-        String customerId = messaging.getSender().getId();
-        String pageId = messaging.getRecipient().getId();
+        ChatMessage chatMessage = new ChatMessage();
+        chatMessage.setMessageID(messaging.getMessage().getMid());
+        chatMessage.setMessageText(messaging.getMessage().getText());
+        chatMessage.setCustomerId(messaging.getSender().getId());
+        chatMessage.setPageId(messaging.getRecipient().getId());
+
         long timestamp = messaging.getTimestamp();
         LocalDateTime dateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.systemDefault());
+        chatMessage.setDateTime(dateTime.toString());
 
-        // Gửi tin nhắn qua WebSocket
-        messagingTemplate.convertAndSend("/topic/messages",
-                new ChatMessage(messageID, messageText, customerId, pageId, dateTime.toString()));
+        messagingTemplate.convertAndSend("/topic/messages", chatMessage);
+
+//        String messageID = messaging.getMessage().getMid();
+//        String messageText = messaging.getMessage().getText();
+//        String customerId = messaging.getSender().getId();
+//        String pageId = messaging.getRecipient().getId();
+//        long timestamp = messaging.getTimestamp();
+//        LocalDateTime dateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.systemDefault());
+
+//         Gửi tin nhắn qua WebSocket
+//        messagingTemplate.convertAndSend("/topic/messages",
+//                new ChatMessage(messageID, messageText, customerId, pageId, dateTime.toString()));
     }
 }
