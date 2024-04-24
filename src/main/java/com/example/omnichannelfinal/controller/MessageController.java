@@ -1,4 +1,4 @@
-package com.example.omnichannelfinal.config;
+package com.example.omnichannelfinal.controller;
 
 import com.example.omnichannelfinal.model.ChatMessage;
 import com.example.omnichannelfinal.service.FacebookMessengerService;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/messages")
+@RequestMapping("/api")
 public class MessageController {
 
     @Autowired
@@ -20,8 +20,8 @@ public class MessageController {
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
-    @PostMapping("/send")
-    @MessageMapping("/send")
+    @PostMapping("/sendMessage")
+    @MessageMapping("/messages")
     public void sendMessage(@RequestBody ChatMessage chatMessage){
 
         facebookMessengerService.sendMessage(chatMessage);
