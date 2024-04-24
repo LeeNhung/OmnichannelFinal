@@ -13,7 +13,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         config.enableSimpleBroker("/topic"); // Cho phép broadcast đến các client đang lắng nghe trên "/topic"
-        config.setApplicationDestinationPrefixes("/webhook"); // Mapping các message đến @MessageMapping annotation trên controller
+        config.setApplicationDestinationPrefixes("/app"); // Mapping các message đến @MessageMapping annotation trên controller
     }
 
     @Override
