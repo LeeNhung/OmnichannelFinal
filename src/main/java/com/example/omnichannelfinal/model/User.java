@@ -15,15 +15,16 @@ import java.util.Set;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
     private String username;
     private String password;
 
     @ManyToMany
     @JoinTable(
-            name = "user_message",
-            joinColumns = @JoinColumn(name = "id"),
-            inverseJoinColumns = @JoinColumn(name = "id")
+            name = "user_chat_message",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "chat_message_id")
     )
     private Set<ChatMessage> chatMessages = new HashSet<>();
 
