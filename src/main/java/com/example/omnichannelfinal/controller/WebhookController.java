@@ -2,8 +2,6 @@ package com.example.omnichannelfinal.controller;
 
 import com.example.omnichannelfinal.model.ChatMessage;
 import com.example.omnichannelfinal.model.WebhookPayload;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +14,11 @@ import java.time.ZoneId;
 public class WebhookController {
     private static final String VERIFY_TOKEN = "12345";
 
-    @Autowired
     private SimpMessagingTemplate messagingTemplate;
+
+    public WebhookController(SimpMessagingTemplate messagingTemplate) {
+        this.messagingTemplate = messagingTemplate;
+    }
 
     @GetMapping
     public String handleGetRequest(@RequestParam("hub.mode") String mode,
@@ -36,11 +37,10 @@ public class WebhookController {
         }
     }
     @PostMapping
-    @MessageMapping("/messages")
     public void handlePostRequest(@RequestBody WebhookPayload payload) {
         System.out.println("-------------- New Request POST --------------");
 
-        System.out.println("Body:"+ payload);
+//        System.out.println("Body:"+ payload);
 
         for (WebhookPayload.Entry entry : payload.getEntry()) {
 
@@ -56,13 +56,12 @@ public class WebhookController {
                 long timestamp = messaging.getTimestamp();
                 LocalDateTime dateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.systemDefault());
                 System.out.println("Time: " + dateTime );
-
                 handleMessage(messaging);
             }
         }
     }
 
-    private void handleMessage(WebhookPayload.Messaging messaging) {
+    public void handleMessage(WebhookPayload.Messaging messaging) {
 
         ChatMessage chatMessage = new ChatMessage();
         chatMessage.setMessageID(messaging.getMessage().getMid());
@@ -73,8 +72,7 @@ public class WebhookController {
         long timestamp = messaging.getTimestamp();
         LocalDateTime dateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.systemDefault());
         chatMessage.setDateTime(dateTime.toString());
-
+        System.out.println(chatMessage);
         messagingTemplate.convertAndSend("/topic/messages", chatMessage);
-
     }
 }
